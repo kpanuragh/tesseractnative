@@ -1,12 +1,18 @@
 {
-  "name": "tesseractnative",
-  "version": "1.0.0",
-  "description": "",
+  "name": "tesseract-native-js",
+  "version": "1.0.1",
+  "description": "Tessract hocr with nodejs in native C++ ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"index.js",
+    "configure":"node-gyp configure",
     "build":"node-gyp rebuild",
     "clean":"node-gyp clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anuraghkp1/tesseractnative.git"
   },
   "author": "Anuragh K.P",
   "license": "ISC",
