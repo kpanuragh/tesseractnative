@@ -18,13 +18,14 @@ std::string hocr::str_hocr(std::string path)
 	api->SetImage(image);
 	// Get OCR result
 	outText = api->GetHOCRText(1);
-	printf("OCR output:\n%s", outText);
+	
 
 	// Destroy used object and release memory
 	api->End();
-	delete[] outText;
+	
 	pixDestroy(&image);
-    return "Hello From Hocr";
+    return outText;
+	delete[] outText;
 }
 Napi::String hocr::HocrWrapper(const Napi::CallbackInfo &info)
 {
