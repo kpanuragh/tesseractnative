@@ -3,4 +3,7 @@ node_modules
 build
 *.jpg
 *.pdf
+Thumbs.db
+*.png
+.vscode
 package-lock.json
