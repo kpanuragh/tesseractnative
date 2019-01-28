@@ -1,6 +1,5 @@
 #include "hocr.h"
 #include <tesseract/baseapi.h>
-#include <leptonica/allheaders.h>
 #include<stdio.h>
 #include "../fix_rotate/fix_rotate.h"
 std::string hocr::str_hocr(std::string path)
