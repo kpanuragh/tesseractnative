@@ -12,8 +12,25 @@ std::string hocr::str_hocr(std::string path)
 	Mat preprocessed = fix_rotate::preprocess2(gray);
 	double skew;
 	fix_rotate::hough_transform(preprocessed, im, &skew);
-	Mat rotated = fix_rotate::rot(im, skew* CV_PI / 180);
+	Mat rotated = fix_rotate::rot(im, skew* CV_PI / 180);	 
 	//end rotation issue
+cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
+	//fix missing pixel
+	   int morph_elem = 1;
+    int morph_size = 1;
+    int morph_operator = 0;
+	 Mat origImage = rotated;
+	 medianBlur(origImage, origImage,1);
+    cvtColor(origImage, origImage, COLOR_RGB2GRAY);
+    threshold(origImage, origImage, 0, 255, THRESH_OTSU);
+
+    Mat element = getStructuringElement(morph_elem, Size(2 * morph_size + 1, 2 * morph_size + 1), cv::Point(morph_size, morph_size));
+
+    morphologyEx(origImage, origImage, MORPH_OPEN, element);
+	rotated=origImage;
+
+	//end missing pixel
+
 
 
 	tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
