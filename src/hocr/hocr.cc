@@ -28,7 +28,7 @@ cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA);
 
     morphologyEx(origImage, origImage, MORPH_OPEN, element);
 
-	medianBlur(origImage, rotated, 3);
+	rotated=origImage;
 	//end missing pixel
 
 
