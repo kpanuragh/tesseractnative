@@ -7,6 +7,7 @@ std::string hocr::str_hocr(std::string path)
   	char *outText;
 	  //Image rotation issue fixing
 	Mat im = imread(path);
+	fastNlMeansDenoisingColored(im,im);
 	Mat gray;
 	cvtColor(im, gray, COLOR_BGR2GRAY);
 	Mat preprocessed = fix_rotate::preprocess2(gray);
@@ -14,23 +15,23 @@ std::string hocr::str_hocr(std::string path)
 	fix_rotate::hough_transform(preprocessed, im, &skew);
 	Mat rotated = fix_rotate::rot(im, skew* CV_PI / 180);	 
 	//end rotation issue
-cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
-	//fix missing pixel
-	   int morph_elem = 1;
-    int morph_size = 1;
-    int morph_operator = 0;
-	 Mat origImage = rotated;
-	 medianBlur(origImage, origImage,1);
-    cvtColor(origImage, origImage, COLOR_RGB2GRAY);
-    threshold(origImage, origImage, 0, 255, THRESH_OTSU);
+// cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
+// 	//fix missing pixel
+// 	   int morph_elem = 1;
+//     int morph_size = 1;
+//     int morph_operator = 0;
+// 	 Mat origImage = rotated;
+// 	 medianBlur(origImage, origImage,5);
+//     cvtColor(origImage, origImage, COLOR_RGB2GRAY);
+//     threshold(origImage, origImage, 0, 255, THRESH_OTSU);
 
-    Mat element = getStructuringElement(morph_elem, Size(2 * morph_size + 1, 2 * morph_size + 1), cv::Point(morph_size, morph_size));
+//     Mat element = getStructuringElement(morph_elem, Size(2 * morph_size + 1, 2 * morph_size + 1), cv::Point(morph_size, morph_size));
 
-    morphologyEx(origImage, origImage, MORPH_OPEN, element);
+//     morphologyEx(origImage, origImage, MORPH_OPEN, element);
 
-	rotated=origImage;
-	//end missing pixel
-
+// 	rotated=origImage;
+// 	//end missing pixel
+rotated=im;
 
 
 	tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
