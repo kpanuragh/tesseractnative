@@ -1,14 +1,7 @@
 #include "fix_rotate.h"
-// Return the rotation matrices for each rotation
-void fix_rotate::rotate(Mat& src, double angle, Mat& dst)
-{
-	Point2f pt(src.cols / 2., src.rows / 2.);
-	Mat r = getRotationMatrix2D(pt, angle, 1.0);
-	warpAffine(src, dst, r, cv::Size(src.cols, src.rows));
-}
 Mat fix_rotate::fix_rotate(char* inputfile)
 {
-    cv::Mat im = cv::imread(inputfile);
+  
 	tesseract::Orientation orientation;
 	tesseract::WritingDirection direction;
 	tesseract::TextlineOrder order;
@@ -31,35 +24,19 @@ Mat fix_rotate::fix_rotate(char* inputfile)
 		orientation, direction, order, deskew_angle);
 	//printf("%d", cv::ROTATE_90_COUNTERCLOCKWISE);
 
-	 // Make larger image
-	int rows = im.rows;
-	int cols = im.cols;
-	int largest = 0;
-	if (rows > cols) {
-		largest = rows;
-	}
-	else {
-		largest = cols;
-	}
-	Mat temp = Mat::zeros(largest, largest, CV_8UC3);
+	cv::Mat src = cv::imread(inputfile, cv::IMREAD_UNCHANGED);
+	double angle = 90*orientation;
 
-	// Copy your original image
-	// First define the roi in the large image --> draw this on a paper to make it clear
-	// There are two possible cases
-	Rect roi;
-	if (im.rows > im.cols) {
-		roi = Rect((temp.cols - im.cols) / 2, 0, im.cols, im.rows);
-	}
-	if (im.cols > im.rows) {
-		roi = Rect(0, (temp.rows - im.rows) / 2, im.cols, im.rows);
-	}
+	// get rotation matrix for rotating the image around its center in pixel coordinates
+	cv::Point2f center((src.cols - 1) / 2.0, (src.rows - 1) / 2.0);
+	cv::Mat rot = cv::getRotationMatrix2D(center, angle, 1.0);
+	// determine bounding rectangle, center not relevant
+	cv::Rect2f bbox = cv::RotatedRect(cv::Point2f(), src.size(), angle).boundingRect2f();
+	// adjust transformation matrix
+	rot.at<double>(0, 2) += bbox.width / 2.0 - src.cols / 2.0;
+	rot.at<double>(1, 2) += bbox.height / 2.0 - src.rows / 2.0;
 
-	// Copy the original to the black large temp image
-	im.copyTo(temp(roi));
-
-	// Rotate the image
-	Mat rotated = temp.clone();
-	fix_rotate::rotate(temp, orientation*90, rotated);
-	Mat result = rotated(Rect(roi.y, roi.x, roi.height, roi.width)).clone();
-    return result;
+	cv::Mat dst;
+	cv::warpAffine(src, dst, rot, bbox.size());
+    return dst;
 }
