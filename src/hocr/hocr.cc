@@ -1,19 +1,27 @@
 #include "hocr.h"
 #include <tesseract/baseapi.h>
 #include<stdio.h>
+#include <cstring>
+#include <string>
+#include "../skew_fix/skew_fix.h"
 #include "../fix_rotate/fix_rotate.h"
 std::string hocr::str_hocr(std::string path)
 {
   	char *outText;
 	  //Image rotation issue fixing
-	Mat im = imread(path);
+
+	char *y = new char[path.length() + 1]; // or
+	// char y[100];
+	char *path_char = new char[path.length() + 1]; 
+	std::strcpy(path_char, path.c_str());
+	Mat im = fix_rotate::fix_rotate(path_char);
 	fastNlMeansDenoisingColored(im,im);
 	Mat gray;
 	cvtColor(im, gray, COLOR_BGR2GRAY);
-	Mat preprocessed = fix_rotate::preprocess2(gray);
+	Mat preprocessed = skew_fix::preprocess2(gray);
 	double skew;
-	fix_rotate::hough_transform(preprocessed, im, &skew);
-	Mat rotated = fix_rotate::rot(im, skew* CV_PI / 180);	 
+	skew_fix::hough_transform(preprocessed, im, &skew);
+	Mat rotated = skew_fix::rot(im, skew* CV_PI / 180);	 
 	//end rotation issue
 // cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
 // 	//fix missing pixel

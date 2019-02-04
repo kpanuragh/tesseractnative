@@ -1,10 +1,11 @@
 #include<iostream>
-#include <opencv2/opencv.hpp>
+#include <tesseract/baseapi.h>
+#include <leptonica/allheaders.h>
+#include<opencv2/opencv.hpp>
+using namespace std;
 using namespace cv;
-namespace fix_rotate{
-void hough_transform(Mat& im, Mat& orig, double* skew);
-Mat preprocess1(Mat& im);
-Mat preprocess2(Mat& im);
-Mat rot(Mat& im, double thetaRad);
-
+namespace fix_rotate
+{
+    void rotate(Mat& src, double angle, Mat& dst);
+    Mat fix_rotate(char* inputfile);
 }
