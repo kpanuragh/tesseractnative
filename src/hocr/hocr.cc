@@ -9,9 +9,6 @@ std::string hocr::str_hocr(std::string path)
 {
   	char *outText;
 	  //Image rotation issue fixing
-
-	char *y = new char[path.length() + 1]; // or
-	// char y[100];
 	char *path_char = new char[path.length() + 1]; 
 	std::strcpy(path_char, path.c_str());
 	Mat im = fix_rotate::fix_rotate(path_char);
