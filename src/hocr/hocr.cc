@@ -7,6 +7,7 @@
 #include "../fix_rotate/fix_rotate.h"
 std::string hocr::str_hocr(std::string path)
 {
+	try{
   	char *outText;
 	  //Image rotation issue fixing
 	char *path_char = new char[path.length() + 1]; 
@@ -60,9 +61,15 @@ rotated=im;
 	// pixDestroy(&image);
     return outText;
 	delete[] outText;
+	}
+		catch(cv::Exception& e){
+		  const char* err_msg = e.what();
+    	std::cout << "exception caught: " << err_msg << std::endl;
+	}
 }
 Napi::String hocr::HocrWrapper(const Napi::CallbackInfo &info)
 {
+	try{
     Napi::Env env=info.Env();
     if(info.Length() < 1)
     {
@@ -70,9 +77,14 @@ Napi::String hocr::HocrWrapper(const Napi::CallbackInfo &info)
     }
     Napi::String path=info[0].As<Napi::String>();
     return Napi::String::New(env,hocr::str_hocr(path.ToString()));
+	}	catch(cv::Exception& e){
+		  const char* err_msg = e.what();
+    	std::cout << "exception caught: " << err_msg << std::endl;
+	}
 }
 Napi::Object hocr::Init(Napi::Env env,Napi::Object exports)
 {
+	
      exports.Set("str_hocr",Napi::Function::New(env,hocr::HocrWrapper));
      return exports;
 }
