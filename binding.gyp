@@ -1,17 +1,33 @@
 ﻿{
     "targets": [{
         "target_name": "tessractnative",
-        "cflags!": [ "-fno-exceptions" ],
-        "cflags_cc!": [ "-fno-exceptions" ],
         "sources": [
             "src/main.cc",
             "src/hocr/hocr.cc",
             "src/skew_fix/skew_fix.cc",
             "src/fix_rotate/fix_rotate.cc"
         ],
+          "cflags" : [
+			"-std=c++11"
+		],
+		"cflags!" : [
+			"-fno-exceptions"
+		],
+         "libs":[
+             "opencv4"
+         ], 
+		"cflags_cc!": [
+			"-fno-rtti",
+			"-fno-exceptions"
+		],
+		"ldflags" : [
+			"-Wl,-rpath,'$$ORIGIN'"
+		],
         'conditions': [
       ['OS=="linux"', {
-
+ 'include_dirs': [
+            "/usr/local/include/opencv4/"
+        ]
       }],
       ['OS=="win"', {
           'include_dirs': [
