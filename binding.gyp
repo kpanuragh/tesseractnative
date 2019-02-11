@@ -28,7 +28,7 @@
       ['OS=="linux"', {
                  'libraries': [
         "-L/usr/local/lib","-llept"," -ltesseract",
-   "-lopencv_core","-lopencv_highgui"
+   "-lopencv_core","-lopencv_highgui","-lopencv_imgcodecs","-lopencv_imgproc","-lopencv_photo"
         ],
  'include_dirs': [
             "/usr/local/include/opencv4/"
