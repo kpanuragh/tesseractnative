@@ -17,7 +17,8 @@ std::string hocr::str_hocr(std::string path)
 	fastNlMeansDenoisingColored(im,im);
 	Mat gray;
 	cvtColor(im, gray, COLOR_BGR2GRAY);
-	Mat preprocessed = skew_fix::preprocess2(gray);
+	Mat preprocessed = skew_fix::preprocess1(gray);
+	preprocessed = skew_fix::preprocess1(preprocessed);
 	double skew;
 	skew_fix::hough_transform(preprocessed, im, &skew);
 	Mat rotated = skew_fix::rot(im, skew* CV_PI / 180);	 

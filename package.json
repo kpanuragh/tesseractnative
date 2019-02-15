@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"index.js",
-    "configure":"node-gyp configure",
-    "build":"node-gyp rebuild",
-    "clean":"node-gyp clean"
+    "start": "index.js",
+    "configure": "node-gyp configure",
+    "build": "node-gyp rebuild",
+    "clean": "node-gyp clean"
   },
   "repository": {
     "type": "git",
