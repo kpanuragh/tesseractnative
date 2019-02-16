@@ -52,6 +52,7 @@ rotated=im;
 	// // Open input image with leptonica library
 	// Pix *image = pixRead(path.c_str());
 	cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
+	cv::imwrite(path,rotated);
 	api->SetImage(rotated.data,rotated.cols,rotated.rows, 4, 4*rotated.cols);
 	// Get OCR result
 	outText = api->GetHOCRText(1);
