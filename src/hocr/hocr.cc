@@ -63,7 +63,7 @@ rotated=im;
 	api->SetImage(rotated.data,rotated.cols,rotated.rows, 4, 4*rotated.cols);
 	// Get OCR result
 	outText = api->GetHOCRText(1);
-	cout<<outText<<endl;
+	
 	//outText=api->GetUTF8Text();
 
 	// Destroy used object and release memory
