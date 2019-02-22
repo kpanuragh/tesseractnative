@@ -12,16 +12,23 @@ std::string hocr::str_hocr(std::string path)
 	  //Image rotation issue fixing
 	char *path_char = new char[path.length() + 1]; 
 	std::strcpy(path_char, path.c_str());
+
 	Mat im = fix_rotate::fix_rotate(path_char);
+
 	cvtColor(im,im,COLOR_GRAY2RGB);
 	fastNlMeansDenoisingColored(im,im);
 	Mat gray;
+
 	cvtColor(im, gray, COLOR_BGR2GRAY);
 	Mat preprocessed = skew_fix::preprocess1(gray);
+
 	preprocessed = skew_fix::preprocess1(preprocessed);
+
 	double skew;
 	skew_fix::hough_transform(preprocessed, im, &skew);
+	
 	Mat rotated = skew_fix::rot(im, skew* CV_PI / 180);	 
+	
 	//end rotation issue
 // cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
 // 	//fix missing pixel
@@ -56,6 +63,7 @@ rotated=im;
 	api->SetImage(rotated.data,rotated.cols,rotated.rows, 4, 4*rotated.cols);
 	// Get OCR result
 	outText = api->GetHOCRText(1);
+	cout<<outText<<endl;
 	//outText=api->GetUTF8Text();
 
 	// Destroy used object and release memory

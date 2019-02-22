@@ -7,26 +7,33 @@ Mat fix_rotate::fix_rotate(char *inputfile)
 		tesseract::WritingDirection direction;
 		tesseract::TextlineOrder order;
 		float deskew_angle;
+		
 		PIX *image = pixRead(inputfile);
+		
 		tesseract::TessBaseAPI *api_osd = new tesseract::TessBaseAPI();
 		if (api_osd->Init(NULL, "eng"))
 		{
-			fprintf(stderr, "Could not initialize tesseract.\n");
-			getchar();
-			exit(1);
+			printf("Could not initialize tesseract.\n");
 		}
+		
 		api_osd->SetPageSegMode(tesseract::PSM_AUTO_OSD);
 		api_osd->SetImage(image);
 		api_osd->Recognize(0);
-
+	
 		tesseract::PageIterator *it = api_osd->AnalyseLayout();
+		cv::Mat src = cv::imread(inputfile, cv::IMREAD_UNCHANGED);
+		if (it == NULL)
+		{
+			return src;
+		}
 		it->Orientation(&orientation, &direction, &order, &deskew_angle);
+		cout<<26<<endl;
 		printf("Orientation: %d;\nWritingDirection: %d\nTextlineOrder: %d\n"
 			   "Deskew angle: %.4f\n",
 			   orientation, direction, order, deskew_angle);
 		//printf("%d", cv::ROTATE_90_COUNTERCLOCKWISE);
 
-		cv::Mat src = cv::imread(inputfile, cv::IMREAD_UNCHANGED);
+		
 		double angle = 90 * orientation;
 
 		// get rotation matrix for rotating the image around its center in pixel coordinates
