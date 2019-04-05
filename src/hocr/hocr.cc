@@ -16,7 +16,7 @@ std::string hocr::str_hocr(std::string path)
 	Mat im = fix_rotate::fix_rotate(path_char);
 
 	cvtColor(im,im,COLOR_GRAY2RGB);
-	fastNlMeansDenoisingColored(im,im);
+	// fastNlMeansDenoisingColored(im,im);
 	Mat gray;
 
 	cvtColor(im, gray, COLOR_BGR2GRAY);
