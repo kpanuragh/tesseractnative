@@ -61,6 +61,7 @@ rotated=im;
 	cv::cvtColor(rotated, rotated, COLOR_BGR2RGBA); 
 	cv::imwrite(path,rotated);
 	api->SetImage(rotated.data,rotated.cols,rotated.rows, 4, 4*rotated.cols);
+	// rotated.release();
 	// Get OCR result
 	outText = api->GetHOCRText(1);
 	
@@ -68,7 +69,7 @@ rotated=im;
 
 	// Destroy used object and release memory
 	api->End();
-	
+	rotated.release();
 	// pixDestroy(&image);
     return outText;
 	delete[] outText;
