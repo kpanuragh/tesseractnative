@@ -21,7 +21,7 @@ Mat fix_rotate::fix_rotate(char *inputfile)
 		api_osd->Recognize(0);
 	
 		tesseract::PageIterator *it = api_osd->AnalyseLayout();
-		cv::Mat src = cv::imread(inputfile, cv::IMREAD_UNCHANGED);
+		cv::Mat src = cv::imread(inputfile, cv::IMREAD_GRAYSCALE);
 		if (it == NULL)
 		{
 			return src;
